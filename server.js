@@ -12,7 +12,11 @@ app.use(bodyParser.urlencoded({
    extended: true
 }));
 
-mongoose.connect("mongodb+srv://zubair:zubair123@cluster0-clyyy.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect("mongodb+srv://zubair:zubair123@cluster0-clyyy.mongodb.net/test?retryWrites=true&w=majority", 
+    { 
+        useNewUrlParser: true, 
+        useUnifiedTopology: true
+    })
     .then(()=>{
         console.log("MongoDB Connected");
     })
@@ -22,10 +26,6 @@ mongoose.connect("mongodb+srv://zubair:zubair123@cluster0-clyyy.mongodb.net/test
 
 // Add body parser
 app.use(bodyParser.json());
-
-app.get("/", (req, res) => {
-    res.send("hello to boiler plate");
-});
 
 app.post("/signup", (req, res) => {
     // creating new user from User model
@@ -73,7 +73,7 @@ app.post('/login',(req, res) => {
 			}else{
 				res.send({"Success":"Wrong password!"});
             }
-                        
+
 		}else{
 			res.send({"Success":"This Email Is not regestered!"});
 		}
