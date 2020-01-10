@@ -31,9 +31,13 @@ app.post("/signup", (req, res) => {
     // creating new user from User model
 
     User.findOne({email:req.body.email},(err,data) => {
+
 		if(data){
+
             res.send({"User":"User Already Exist"})
+
         }else{
+
             const newUser = new User({
                 firstName: req.body.firstName,
                 lastName:  req.body.lastName,
@@ -42,8 +46,8 @@ app.post("/signup", (req, res) => {
                 password: req.body.password
             });
 
-            console.log(req.body);
-            console.log(newUser);
+            // console.log(req.body);
+            // console.log(newUser);
 
             newUser.save()
                 .then((user) => {
@@ -59,15 +63,17 @@ app.post("/signup", (req, res) => {
 app.post('/login',(req, res) => {
 	//console.log(req.body);
 	User.findOne({email:req.body.email},(err,data) => {
-		if(data){
+
+        if(data){
 			
 			if(data.password==req.body.password){
-				//console.log("Done Login");
-				res.send({"Success":"Success!"});
-				
+                //console.log("Done Login");
+                res.json(data);
+            
 			}else{
 				res.send({"Success":"Wrong password!"});
-			}
+            }
+                        
 		}else{
 			res.send({"Success":"This Email Is not regestered!"});
 		}
