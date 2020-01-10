@@ -1,12 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const cors = require('cors');
 
 const User = require("./User");
 
 const app = express();
 
-
+app.use(cors());
 app.use(bodyParser.urlencoded({
    extended: true
 }));
@@ -28,24 +29,31 @@ app.get("/", (req, res) => {
 
 app.post("/signup", (req, res) => {
     // creating new user from User model
-    const newUser = new User({
-        firstName: req.body.firstName,
-        lastName:  req.body.lastName,
-        email: req.body.email,
-        phoneNumber: req.body.phoneNumber,
-        password: req.body.password
+
+    User.findOne({email:req.body.email},(err,data) => {
+		if(data){
+            res.send({"User":"User Already Exist"})
+        }else{
+            const newUser = new User({
+                firstName: req.body.firstName,
+                lastName:  req.body.lastName,
+                email: req.body.email,
+                phoneNumber: req.body.phoneNumber,
+                password: req.body.password
+            });
+
+            console.log(req.body);
+            console.log(newUser);
+
+            newUser.save()
+                .then((user) => {
+                    res.json(user) // Sending back new user data
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
     });
-
-    console.log(req.body);
-    console.log(newUser);
-
-    newUser.save()
-        .then((user) => {
-            res.json(user) // Sending back new user data
-        })
-        .catch((err) => {
-            console.log(err);
-        });
 });
 
 app.post('/login',(req, res) => {
