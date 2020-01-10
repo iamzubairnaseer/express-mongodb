@@ -21,11 +21,12 @@ mongoose.connect("mongodb+srv://zubair:zubair123@cluster0-clyyy.mongodb.net/test
 
 // Add body parser
 app.use(bodyParser.json());
+
 app.get("/", (req, res) => {
     res.send("hello to boiler plate");
 });
 
-app.post("/", (req, res) => {
+app.post("/signup", (req, res) => {
     // creating new user from User model
     const newUser = new User({
         firstName: req.body.firstName,
@@ -45,8 +46,25 @@ app.post("/", (req, res) => {
         .catch((err) => {
             console.log(err);
         });
-})
+});
 
+app.post('/login',(req, res) => {
+	//console.log(req.body);
+	User.findOne({email:req.body.email},(err,data) => {
+		if(data){
+			
+			if(data.password==req.body.password){
+				//console.log("Done Login");
+				res.send({"Success":"Success!"});
+				
+			}else{
+				res.send({"Success":"Wrong password!"});
+			}
+		}else{
+			res.send({"Success":"This Email Is not regestered!"});
+		}
+	});
+});
 
 app.listen(3030, (req,res)=>{
     console.log(`running on port 3030`);
