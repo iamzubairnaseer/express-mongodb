@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require('cors');
 
 const User = require("./User");
+const Res = require("./Restaurant");
 
 const app = express();
 
@@ -78,6 +79,23 @@ app.post('/login',(req, res) => {
 			res.send({"Success":"This Email Is not regestered!"});
 		}
 	});
+});
+
+app.post('/res',(req,res) => {
+
+    const newRes = new Res({
+        resName: req.body.resName,
+        resDesc: req.body.resDesc,
+        resCat: req.body.resCat
+    });
+
+    newRes.save()
+        .then((resu) => {
+            res.json(resu) // Sending back new user data
+        })
+        .catch((err) => {
+            console.log(err);
+        })
 });
 
 app.listen(3030, (req,res)=>{
