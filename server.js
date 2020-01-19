@@ -4,7 +4,8 @@ const bodyParser = require("body-parser");
 const cors = require('cors');
 
 const User = require("./User");
-const Res = require("./Restaurant");
+const Resu = require("./Restaurant");
+const Menu = require("./Menu");
 
 const app = express();
 
@@ -27,6 +28,10 @@ mongoose.connect("mongodb+srv://zubair:zubair123@cluster0-clyyy.mongodb.net/test
 
 // Add body parser
 app.use(bodyParser.json());
+
+app.get("/signup/",(req,res) => {
+    res.send("Get api at root.");
+});
 
 app.post("/signup", (req, res) => {
     // creating new user from User model
@@ -83,10 +88,12 @@ app.post('/login',(req, res) => {
 
 app.post('/res',(req,res) => {
 
-    const newRes = new Res({
+    const newRes = new Resu({
         resName: req.body.resName,
         resDesc: req.body.resDesc,
-        resCat: req.body.resCat
+        resCat: req.body.resCat,
+        resMinOrder: req.body.resMinOrder,
+        resDevPrice: req.body.resDevPrice
     });
 
     newRes.save()
@@ -96,6 +103,62 @@ app.post('/res',(req,res) => {
         .catch((err) => {
             console.log(err);
         })
+});
+
+app.post('/res/menu:restaurant',(req,res) => {
+    // console.log(req.params.restaurant)
+    const newMenu = new Menu({
+        resName: req.params.restaurant,
+        menuName: req.body.menuName,
+        menuCat: req.body.menuCat,
+        menuDesc: req.body.menuDesc,
+        menuPrice: req.body.menuPrice
+    });
+
+    newMenu.save()
+        .then((menu) => {
+            res.json(menu)
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+});
+
+app.get('/res',(req,res) => {
+    
+    Resu.find({},(err,data) => {
+
+        if(data){
+            res.json(data);
+        }else{
+            res.send({"Response":"No Restaurant Found"});
+        }
+    })
+});
+
+app.get('/res/menu:restaurant',(req,res) => {
+
+    // console.log(req.params.restaurant);
+
+    Menu.find({resName:req.params.restaurant},(err,data) => {
+        if (data){
+            res.json(data);
+        }else{
+            res.send({"Response":"No Menu Found"});
+        }
+    })
+});
+
+app.get('/res/:Search',(req,res) => {
+
+    Resu.findOne({resName:req.params.Search},(err,data) => {
+        
+        if(data){
+            res.json(data);
+        }else{
+            res.send({"Response":"No Restaurant Found"});
+        }
+    })
 });
 
 app.listen(3030, (req,res)=>{

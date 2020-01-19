@@ -1,28 +1,27 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-// creating schema
-const ResSchema = new Schema({
-    resName: {
+const menuSchema = new Schema({
+    resName:{
         type: String,
         required: true
     },
-    resDesc: {
+    menuName: {
         type: String,
         required: true
     },
-    resMinOrder: {
+    menuCat: {
+        type: String,
+        required: true
+    },
+    menuDesc: {
+        type: String,
+        required: true
+    },
+    menuPrice: {
         type: Number,
         required: true
-    },
-    resDevPrice: {
-        type: Number,
-        required: true
-    },
-    resCat: {
-        type: String,
-        required: true
-    },
+    }
 });
 
-module.exports = Res = mongoose.model('res', ResSchema);
+module.exports = menu = mongoose.model('Menu',menuSchema);
