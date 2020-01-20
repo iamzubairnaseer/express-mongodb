@@ -144,7 +144,7 @@ app.get('/res/menu:restaurant',(req,res) => {
         if (data){
             res.json(data);
         }else{
-            res.send({"Response":"No Menu Found"});
+            res.json({"Response":"No Menu Found"});
         }
     })
 });
